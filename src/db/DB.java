@@ -18,6 +18,7 @@ public class DB {
 			try {
 				Properties props = loadProperties();
 				String url = props.getProperty("dburl");
+				props.setProperty("allowPublicKeyRetrieval", "true");
 				conn = DriverManager.getConnection(url, props);
 			}
 			catch (SQLException e) {
