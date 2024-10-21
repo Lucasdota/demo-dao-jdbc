@@ -55,22 +55,11 @@ public class SellerDaoJDBC implements SellerDao {
 				/* time to get the ResultSet table that came
 				   and instanciate it as objects in the memory
 				   that's mandatory when working with OOP
-				 */
-			
+				 */		
 				// creates Department
-				Department dep = new Department();
-				// gets the departmentId column value of the table
-				dep.setId(rs.getInt("DepartmentId"));
-				dep.setName(rs.getString("DepName"));
+				Department dep = instantiateDepartment(rs);	
 				// now creates Seller to link with its own Department
-				Seller obj = new Seller();
-				obj.setId(rs.getInt("Id"));
-				obj.setName(rs.getString("Name"));
-				obj.setEmail(rs.getString("Email"));
-				obj.setBaseSalary(rs.getDouble("BaseSalary"));
-				obj.setBirthDate(rs.getDate("BirthDate"));
-				// links Seller with Department
-				obj.setDepartment(dep);
+				Seller obj = instantiateSeller(rs, dep);
 				return obj;
 			}
 			// if a result didn't come, returns null
@@ -87,6 +76,28 @@ public class SellerDaoJDBC implements SellerDao {
 			 * when using the other methods
 			 */
 		}	
+	}
+
+	private Seller instantiateSeller(ResultSet rs, Department dep) throws SQLException {
+		Seller obj = new Seller();
+		obj.setId(rs.getInt("Id"));
+		obj.setName(rs.getString("Name"));
+		obj.setEmail(rs.getString("Email"));
+		obj.setBaseSalary(rs.getDouble("BaseSalary"));
+		obj.setBirthDate(rs.getDate("BirthDate"));
+		// links Seller with Department
+		obj.setDepartment(dep);
+		return obj;
+	}
+
+	private Department instantiateDepartment(ResultSet rs) 
+			// only propagates exception because findById is already treating it
+			throws SQLException {
+		Department dep = new Department();
+		// gets the departmentId column value of the table
+		dep.setId(rs.getInt("DepartmentId"));
+		dep.setName(rs.getString("DepName"));
+		return dep;
 	}
 
 	@Override
